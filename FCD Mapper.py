@@ -3,6 +3,8 @@ import tkinter as tk
 from tkinter.filedialog import askopenfilename
 from tkinter.filedialog import asksaveasfilename
 import rasterio
+import sklearn
+from sklearn.decomposition import PCA
 
 root = tk.Tk()
 root.title("FCD Mapper")
@@ -141,8 +143,6 @@ def browseFCD():
 FCDButton = tk.Button(root, text="Browse", command=browseFCD)
 FCDButton.grid(row=4, column=5, padx=5, pady=5)
 
-#Read raster files
-
 def CalculateFCD():
       BlueBand = rasterio.open(BlueEntry.get()) #Read raster files from path defined
       GreenBand = rasterio.open(GreenEntry.get())
@@ -150,12 +150,12 @@ def CalculateFCD():
       NIRBand = rasterio.open(NIREntry.get())
       SWIRBand = rasterio.open(SWIREntry.get())
       TIRBand = rasterio.open(TIREntry.get())
-      blue= BlueBand.read(1).astype('float32') #Convert data into float
-      green= GreenBand.read(1).astype('float32')
-      red = RedBand.read(1).astype('float32')
-      nir = NIRBand.read(1).astype('float32')
-      swir = SWIRBand.read(1).astype('float32')
-      tir = TIRBand.read(1).astype('float32')
+      blue= BlueBand.read(1).astype('float64') #Convert data into float
+      green= GreenBand.read(1).astype('float64')
+      red = RedBand.read(1).astype('float64')
+      nir = NIRBand.read(1).astype('float64')
+      swir = SWIRBand.read(1).astype('float64')
+      tir = TIRBand.read(1).astype('float64')
 
       np.seterr(divide='ignore', invalid='ignore') #allow division by zero
       #Calculate AVI
@@ -167,8 +167,8 @@ def CalculateFCD():
                         count=1,
                         crs=NIRBand.crs,
                         transform=NIRBand.transform,
-                        dtype='float32') as AVIimage:
-            AVIimage.write_band(1,AVI.astype(rasterio.float32))
+                        dtype='float64') as AVIimage:
+            AVIimage.write_band(1,AVI.astype(rasterio.float64))
 
       # Calculate BSI
       BSI = np.where(((swir+nir)+(nir+blue))<0, 100,(((swir+nir)-(nir+blue))/((swir+nir)+(nir+blue))*100)+100)
@@ -179,8 +179,8 @@ def CalculateFCD():
                         count=1,
                         crs=NIRBand.crs,
                         transform=NIRBand.transform,
-                        dtype='float32') as BSIimage:
-            BSIimage.write_band(1, BSI.astype(rasterio.float32))
+                        dtype='float64') as BSIimage:
+            BSIimage.write_band(1, BSI.astype(rasterio.float64))
 
       #Calculate CSI
       CSI = ((35536-blue)*(35536-green)*(35536-red))**(1/3)
@@ -191,8 +191,8 @@ def CalculateFCD():
                         count=1,
                         crs=BlueBand.crs,
                         transform=BlueBand.transform,
-                        dtype='float32') as CSIimage:
-            CSIimage.write_band(1, CSI.astype(rasterio.float32))
+                        dtype='float64') as CSIimage:
+            CSIimage.write_band(1, CSI.astype(rasterio.float64))
 
       #Calculate L-lambda for TI
       Llambda = (float(MLentry.get())*tir)+float(ALentry.get())
@@ -205,8 +205,36 @@ def CalculateFCD():
                         count=1,
                         crs=TIRBand.crs,
                         transform=TIRBand.transform,
-                        dtype='float32') as TIimage:
-            TIimage.write_band(1, TI.astype(rasterio.float32))
+                        dtype='float64') as TIimage:
+            TIimage.write_band(1, TI.astype(rasterio.float64))
+      #PCA for VD
+      PC1 = np.stack((AVI.flatten(), BSI.flatten()), axis=0)
+      PC1 = np.where(np.isfinite(PC1), PC1, 0) #setting nodata to 0
+      pca1 = PCA(PC1)
+      outpca1 = np.transpose(pca1.n_components)
+      VD = np.reshape(outpca1[:,0], (NIRBand.height,NIRBand.width))
+      SVD = (VD/np.amax(VD))*100 #Rescaling VD in range 0-100
+
+      #PCA for SI
+      PC2 = np.stack((CSI.flatten(),TI.flatten()), axis=0)
+      PC2 = np.where(np.isfinite(PC2), PC2, 0) #Setting nodata to 0
+      pca2 = PCA(PC2)
+      outpca2 = np.transpose(pca2.n_components)
+      SI = np.reshape(outpca2[:,0], (NIRBand.height,NIRBand.width))
+      SSI = (SI/np.amax(SI))*100 #Rescaling SI from 0-100
+
+      #Calculate FCD
+      FCD = (((SVD*SSI)+1)**0.5)-1
+
+      #Save FCD Image
+      with rasterio.open(FCDEntry.get(), 'w',driver='Gtiff',
+                        width=NIRBand.width,
+                        height=NIRBand.height,
+                        count=1,
+                        crs=NIRBand.crs,
+                        transform=NIRBand.transform,
+                        dtype='float64') as FCDimage:
+            FCDimage.write_band(1, FCD.astype(rasterio.float64))
       
 CalcButton = tk.Button(root, text="Calculate FCD", command=CalculateFCD)
 CalcButton.grid(row=6,column=4, padx=5, pady=5)
