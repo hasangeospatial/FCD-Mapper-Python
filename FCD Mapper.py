@@ -14,8 +14,9 @@ BlueLabel.grid(row=0,column=0, padx=5, pady=5)
 BlueEntry = tk.Entry(root, text="")
 BlueEntry.grid(row=0, column=1, padx=5, pady=5)
 def browseBlue():
+      BlueEntry.delete(0,"end")
       filename = askopenfilename(filetypes=(("Tiff files","*.tif"), ("All files", "*.*"),), title="Open Blue Band")
-      BlueEntry.insert(tk.END, filename) # add this
+      BlueEntry.insert(tk.END, filename) # add blue band path
 
 BlueButton = tk.Button(root, text="Browse", command=browseBlue)
 BlueButton.grid(row=0, column=2, padx=5, pady=5)
@@ -26,8 +27,9 @@ GreenLabel.grid(row=1, column=0, padx=5, pady=5)
 GreenEntry = tk.Entry(root, text="")
 GreenEntry.grid(row=1, column=1, padx=5, pady=5)
 def browseGreen():
+      GreenEntry.delete(0,"end")
       filename = askopenfilename(filetypes=(("Tiff files","*.tif"), ("All files", "*.*"),), title="Open Green Band")
-      GreenEntry.insert(tk.END, filename) # add this
+      GreenEntry.insert(tk.END, filename) # add green band path
 
 GreenButton = tk.Button(root, text="Browse", command=browseGreen)
 GreenButton.grid(row=1, column=2, padx=5, pady=5)
@@ -38,8 +40,9 @@ RedLabel.grid(row=2, column=0, padx=5, pady=5)
 RedEntry = tk.Entry(root, text="")
 RedEntry.grid(row=2, column=1, padx=5, pady=5)
 def browseRed():
+      RedEntry.delete(0,"end")
       filename = askopenfilename(filetypes=(("Tiff files","*.tif"), ("All files", "*.*"),), title= "Open Red Band")
-      RedEntry.insert(tk.END, filename) # add this
+      RedEntry.insert(tk.END, filename) # add red band path
 
 RedButton = tk.Button(root, text="Browse", command=browseRed)
 RedButton.grid(row=2, column=2, padx=5, pady=5)
@@ -50,8 +53,9 @@ NIRLabel.grid(row=3, column=0, padx=5, pady=5)
 NIREntry = tk.Entry(root, text="")
 NIREntry.grid(row=3, column=1, padx=5, pady=5)
 def browseNIR():
+      NIREntry.delete(0,"end")
       filename = askopenfilename(filetypes=(("Tiff files","*.tif"), ("All files", "*.*"),), title="Open NIR band")
-      NIREntry.insert(tk.END, filename) # add this
+      NIREntry.insert(tk.END, filename) # add NIR band path
 
 NIRButton = tk.Button(root, text="Browse", command=browseNIR)
 NIRButton.grid(row=3, column=2, padx=5, pady=5)
@@ -62,8 +66,9 @@ SWIRLabel.grid(row=4, column=0, padx=5, pady=5)
 SWIREntry = tk.Entry(root, text="")
 SWIREntry.grid(row=4, column=1, padx=5, pady=5)
 def browseSWIR():
+      SWIREntry.delete(0,"end")
       filename = askopenfilename(filetypes=(("Tiff files","*.tif"), ("All files", "*.*"),), title="Open SWIR Band")
-      SWIREntry.insert(tk.END, filename) # add this
+      SWIREntry.insert(tk.END, filename) # add SWIR band
 
 SWIRButton = tk.Button(root, text="Browse", command=browseSWIR)
 SWIRButton.grid(row=4, column=2, padx=5, pady=5)
@@ -74,22 +79,23 @@ TIRLabel.grid(row=5, column=0, padx=5, pady=5)
 TIREntry = tk.Entry(root, text="")
 TIREntry.grid(row=5, column=1, padx=5, pady=5)
 def browseTIR():
+      TIREntry.delete(0,"end")
       filename = askopenfilename(filetypes=(("Tiff files","*.tif"), ("All files", "*.*"),), title = "Open TIR Band")
-      TIREntry.insert(tk.END, filename) # add this
+      TIREntry.insert(tk.END, filename) # add TIR band path
 
 TIRButton = tk.Button(root, text="Browse", command=browseTIR)
 TIRButton.grid(row=5, column=2, padx=5, pady=5)
 
-#Input fo Additional Parameters for TI
-MLlabel = tk.Label(root, text="ML")
-MLlabel.grid(row=6, column=0, padx=5, pady=5)
-MLentry = tk.Entry(root,text="")
-MLentry.grid(row=6, column=1, padx=5, pady=5)
+#Input Additional Parameters for TI
+K1label = tk.Label(root, text="K1")
+K1label.grid(row=6, column=0, padx=5, pady=5)
+K1entry = tk.Entry(root,text="")
+K1entry.grid(row=6, column=1, padx=5, pady=5)
 
-ALlabel = tk.Label(root, text="AL")
-ALlabel.grid(row=7, column=0, padx=5, pady=5)
-ALentry = tk.Entry(root,text="")
-ALentry.grid(row=7, column=1, padx=5, pady=5)
+K2label = tk.Label(root, text="K2")
+K2label.grid(row=7, column=0, padx=5, pady=5)
+K2entry = tk.Entry(root,text="")
+K2entry.grid(row=7, column=1, padx=5, pady=5)
 
 #Path for Saving Indices
 AVILabel = tk.Label(root, text="AVI index")
@@ -97,8 +103,9 @@ AVILabel.grid(row=0, column=3, padx=5, pady=5)
 AVIEntry = tk.Entry(root, text="")
 AVIEntry.grid(row=0, column=4, padx=5, pady=5)
 def browseAVI():
+      AVIEntry.delete(0,"end")
       filename = asksaveasfilename(defaultextension='.tif',filetypes=(("Tiff files","*.tif"), ), title="Choose AVI filename")
-      AVIEntry.insert(tk.END, filename) # add this
+      AVIEntry.insert(tk.END, filename) # add path with filename
 AVIButton = tk.Button(root, text="Browse", command=browseAVI)
 AVIButton.grid(row=0, column=5, padx=5, pady=5)
 
@@ -107,8 +114,9 @@ BSILabel.grid(row=1, column=3, padx=5, pady=5)
 BSIEntry = tk.Entry(root, text="")
 BSIEntry.grid(row=1, column=4, padx=5, pady=5)
 def browseBSI():
+      BSIEntry.delete(0,"end")
       filename = asksaveasfilename(defaultextension='.tif',filetypes=(("Tiff files","*.tif"), ),title="Choose BSI filename")
-      BSIEntry.insert(tk.END, filename) # add this
+      BSIEntry.insert(tk.END, filename) # add path with filename
 BSIButton = tk.Button(root, text="Browse", command=browseBSI)
 BSIButton.grid(row=1, column=5, padx=5, pady=5)
 
@@ -117,8 +125,9 @@ CSILabel.grid(row=2, column=3, padx=5, pady=5)
 CSIEntry = tk.Entry(root, text="")
 CSIEntry.grid(row=2, column=4, padx=5, pady=5)
 def browseCSI():
+      CSIEntry.delete(0,"end")
       filename = asksaveasfilename(defaultextension='.tif',filetypes=(("Tiff files","*.tif"), ),title="Choose CSI filename")
-      CSIEntry.insert(tk.END, filename) # add this
+      CSIEntry.insert(tk.END, filename) # add path with filename
 CSIButton = tk.Button(root, text="Browse", command=browseCSI)
 CSIButton.grid(row=2, column=5, padx=5, pady=5)
 
@@ -127,8 +136,9 @@ TILabel.grid(row=3, column=3, padx=5, pady=5)
 TIEntry = tk.Entry(root, text="")
 TIEntry.grid(row=3, column=4, padx=5, pady=5)
 def browseTI():
+      TIEntry.delete(0,"end")
       filename = asksaveasfilename(defaultextension='.tif',filetypes=(("Tiff files","*.tif"), ),title="Choose TI filename")
-      TIEntry.insert(tk.END, filename) # add this
+      TIEntry.insert(tk.END, filename) # add path with filename
 TIButton = tk.Button(root, text="Browse", command=browseTI)
 TIButton.grid(row=3, column=5, padx=5, pady=5)
 
@@ -137,12 +147,24 @@ FCDLabel.grid(row=4, column=3, padx=5, pady=5)
 FCDEntry = tk.Entry(root, text="")
 FCDEntry.grid(row=4, column=4, padx=5, pady=5)
 def browseFCD():
+      FCDEntry.delete(0,"end")
       filename = asksaveasfilename(defaultextension='.tif',filetypes=(("Tiff files","*.tif"), ), title="Choose FCD filename")
-      FCDEntry.insert(tk.END, filename) # add this
+      FCDEntry.insert(tk.END, filename) # add path with filename
 FCDButton = tk.Button(root, text="Browse", command=browseFCD)
 FCDButton.grid(row=4, column=5, padx=5, pady=5)
 
 np.seterr(divide='ignore', invalid='ignore') #allow division by zero and power of negative numbers (for AVI, FCD, BSI)
+
+#Defining a function to export indices as raster
+def ExportIndex(rasterpath, Refraster, InputIndex):
+    with rasterio.open(rasterpath, 'w',driver='Gtiff',
+                        width=Refraster.width,
+                        height=Refraster.height,
+                        count=1,
+                        crs=Refraster.crs,
+                        transform=Refraster.transform,
+                        dtype='float32') as SaveImage:
+        SaveImage.write_band(1,InputIndex.astype(rasterio.float32))
 
 def CalculateFCD():
       BlueBand = rasterio.open(BlueEntry.get()) #Open raster files from path defined
@@ -165,55 +187,26 @@ def CalculateFCD():
 
       #Calculate AVI
       AVI = np.where((nir-red) <0,0,((nir+1)*(65536-nir)*(nir-red))**(1/3))
-      #Save AVI image
-      with rasterio.open(AVIEntry.get(), 'w',driver='Gtiff',
-                        width=NIRBand.width,
-                        height=NIRBand.height,
-                        count=1,
-                        crs=NIRBand.crs,
-                        transform=NIRBand.transform,
-                        dtype='float32') as AVIimage:
-            AVIimage.write_band(1,AVI.astype(rasterio.float32))
+      #Export AVI image
+      ExportIndex(AVIEntry.get(), NIRBand, AVI)
 
       # Calculate BSI
       BSI = (((swir+nir)-(nir+blue))/((swir+nir)+(nir+blue))*100)+100
-      #Save BSI Image
-      with rasterio.open(BSIEntry.get(), 'w',driver='Gtiff',
-                        width=NIRBand.width,
-                        height=NIRBand.height,
-                        count=1,
-                        crs=NIRBand.crs,
-                        transform=NIRBand.transform,
-                        dtype='float32') as BSIimage:
-            BSIimage.write_band(1, BSI.astype(rasterio.float32))
+      #Export BSI Image
+      ExportIndex(BSIEntry.get(), NIRBand, BSI)
 
       #Calculate CSI
       CSI = ((65536-blue)*(65536-green)*(65536-red))**(1/3)
-      #Save CSI Image 
-      with rasterio.open(CSIEntry.get(), 'w',driver='Gtiff',
-                        width=BlueBand.width,
-                        height=BlueBand.height,
-                        count=1,
-                        crs=BlueBand.crs,
-                        transform=BlueBand.transform,
-                        dtype='float32') as CSIimage:
-            CSIimage.write_band(1, CSI.astype(rasterio.float32))
+      #Export CSI Image 
+      ExportIndex(CSIEntry.get(), NIRBand, CSI)
 
-      #Calculate L-lambda for TI
-      Llambda = (float(MLentry.get())*tir)+float(ALentry.get())
       #Calculate Thermal Index
-      TI = (1201.1422/(np.log((480.883/Llambda)+1.0)))-273.15
-      #Save TI Image
-      with rasterio.open(TIEntry.get(), 'w',driver='Gtiff',
-                        width=TIRBand.width,
-                        height=TIRBand.height,
-                        count=1,
-                        crs=TIRBand.crs,
-                        transform=TIRBand.transform,
-                        dtype='float32') as TIimage:
-            TIimage.write_band(1, TI.astype(rasterio.float32))
+      TI = ((K2entry.get())/(np.log(((K1entry.get())/tir)+1.0)))-273.15
+      #Export TI Image
+      ExportIndex(TIEntry.get(), NIRBand, TI)
+
       #PCA for VD
-      PC1 = np.stack((AVI.flatten(), BSI.flatten()), axis=0)
+      PC1 = np.stack((AVI.flatten(), BSI.flatten()), axis=0)#creating 
       PC1 = np.where(np.isfinite(PC1), PC1, 0) #setting nodata to 0
       pca1 = PCA(PC1)
       outpca1 = np.transpose(pca1.n_components)
@@ -230,16 +223,8 @@ def CalculateFCD():
 
       #Calculate FCD
       FCD = (((SVD*SSI)+1)**0.5)-1
-
       #Save FCD Image
-      with rasterio.open(FCDEntry.get(), 'w',driver='Gtiff',
-                        width=NIRBand.width,
-                        height=NIRBand.height,
-                        count=1,
-                        crs=NIRBand.crs,
-                        transform=NIRBand.transform,
-                        dtype='float32') as FCDimage:
-            FCDimage.write_band(1, FCD.astype(rasterio.float32))
+      ExportIndex(FCDEntry.get(), NIRBand, FCD)
       
 CalcButton = tk.Button(root, text="Calculate FCD", command=CalculateFCD)
 CalcButton.grid(row=6,column=4, padx=5, pady=5)
