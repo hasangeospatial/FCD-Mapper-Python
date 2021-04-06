@@ -185,6 +185,9 @@ def CalculateFCD():
       swir[swir==np.nan] = 0
       tir[tir==np.nan] = 0
 
+      K1 = float(K1entry.get())
+      K2 = float(K2entry.get())
+
       #Calculate AVI
       AVI = np.where((nir-red) <0,0,((nir+1)*(65536-nir)*(nir-red))**(1/3))
       #Export AVI image
@@ -201,11 +204,11 @@ def CalculateFCD():
       ExportIndex(CSIEntry.get(), NIRBand, CSI)
 
       #Calculate Thermal Index
-      TI = ((K2entry.get())/(np.log(((K1entry.get())/tir)+1.0)))-273.15
+      TI = (K2/(np.log((K1/tir)+1.0)))-273.15
       #Export TI Image
       ExportIndex(TIEntry.get(), NIRBand, TI)
 
-      #PCA for VD
+      #PCA for obtaining Scaled Vegetation Demsity (SVD)
       PC1 = np.stack((AVI.flatten(), BSI.flatten()), axis=0)#creating 
       PC1 = np.where(np.isfinite(PC1), PC1, 0) #setting nodata to 0
       pca1 = PCA(PC1)
@@ -213,19 +216,19 @@ def CalculateFCD():
       VD = np.reshape(outpca1[:,0], (NIRBand.height,NIRBand.width))
       SVD = (VD/np.amax(VD))*100 #Rescaling VD in range 0-100
 
-      #PCA for SI
+      #PCA for obtaning Scaled Shadow Index (SSI)
       PC2 = np.stack((CSI.flatten(),TI.flatten()), axis=0)
       PC2 = np.where(np.isfinite(PC2), PC2, 0) #Setting nodata to 0
       pca2 = PCA(PC2)
       outpca2 = np.transpose(pca2.n_components)
       SI = np.reshape(outpca2[:,0], (NIRBand.height,NIRBand.width))
       SSI = (SI/np.amax(SI))*100 #Rescaling SI from 0-100
-
+      
       #Calculate FCD
       FCD = (((SVD*SSI)+1)**0.5)-1
       #Save FCD Image
       ExportIndex(FCDEntry.get(), NIRBand, FCD)
-      
+
 CalcButton = tk.Button(root, text="Calculate FCD", command=CalculateFCD)
 CalcButton.grid(row=6,column=4, padx=5, pady=5)
 
